@@ -1,0 +1,81 @@
+/*
+¤¤¤color style
+    #F5F5F5 -> gris clair
+    #A9C52F -> vert
+    #2C5D63 -> bleu
+    #283739 -> gris bleu
+*/
+body {
+    background-color: #F5F5F5;
+}
+.historique{
+    max-height: 142px;
+    display: block;
+    overflow-y: auto;
+        
+}
+header {
+    display: block;
+    padding-top: 4vh;
+    min-height: 20vh;
+    text-align: center;
+    background-color: #283739;
+    color: #F5F5F5;
+}
+.db-block {
+    border-bottom: 1px solid #ccc;
+}
+.db-block, .query-block {
+    padding-bottom: 5px;
+    padding-top: 10px;
+}
+
+.db-form {
+    width: 50% ;
+    display: inline-block;
+    margin-left: 8%;
+}
+h5 {
+    font-weight: bold;
+}
+.error {
+    background-color:#F6CAC9;
+    width:100%;
+    min-height: 40px;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.success {
+    min-height: 40px;
+    width: 100%;
+    background-color: #283739;
+    color: #F5F5F5;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.panel-heading{
+    padding: 0;
+}
+.header-req, .header-tables {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    
+}
+.panel-heading b {
+    line-height: 1.4;
+}
+.glyphicon {
+    margin-right: 10px;
+}
+.tables-block {
+    max-height: 140px;
+    width: 100%;
+    overflow-y: auto;
+}
+.panel-body {
+    overflow-x: auto;
+}

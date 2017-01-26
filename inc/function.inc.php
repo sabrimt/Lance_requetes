@@ -1,4 +1,5 @@
 <?php
+require_once 'init.inc.php';
 //Fonction d'exécution de requêtes 
 function execute_requete($req)
 {
