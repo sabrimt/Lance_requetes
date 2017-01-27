@@ -12,17 +12,15 @@ $tables = execute_requete("SHOW TABLES");
 $requete_entree ="";
 if(isset($_POST['requete']) && (isset($_POST['db'])) && !empty($_POST['requete']))
 {
-  
+    $requete_entree = execute_requete($_POST['requete']);// execution de requete
 
-  $requete_entree = execute_requete($_POST['requete']);// execution de requete
-
-  $_POST['requete'] = htmlentities($_POST['requete'], ENT_QUOTES);
-  $_POST['db'] = htmlentities($_POST['db'], ENT_QUOTES);
+    $_POST['requete'] = htmlentities($_POST['requete'], ENT_QUOTES);
+    $_POST['db'] = htmlentities($_POST['db'], ENT_QUOTES);
 
 
-//$employes = $requete_entree->fetch_assoc();
+    //$employes = $requete_entree->fetch_assoc();
 
-//echo $employes;
+    //echo $employes;
 }
 //$resultat = $mysqli->query("SELECT * FROM employes WHERE id_employes=350");
 
@@ -32,22 +30,22 @@ if(isset($_POST['requete']) && (isset($_POST['db'])) && !empty($_POST['requete']
 if(isset($_POST['requete']) && isset($_POST['db']) && ($requete_entree))
 {
   // Création d'un fichier historique.txt
-  $f = fopen("historique.txt", "a"); 
+  $f = fopen("historique.txt", "a");
 }
 
 // Suppression historique
 if(isset($_GET['action']) && ($_GET['action'] == 'supprimer_hist'))
 {
   unlink("historique.txt");
-  header("location:lance_requetes.php");
+  header("location:index.php");
 
 }
 
 /*RECUPERATION DES REQUETES DS L'HISTORIQUE*/
 if(isset($_GET['action']) && $_GET['action'] == 'reprendre')
 {
-  $bdd_recup = $_GET['db'];// recuperation de base de données depuis historique
-  $req_recup = $_GET['req'];// recuperation de requête depuis historique
+    $bdd_recup = $_GET['db'];// recuperation de base de données depuis historique
+    $req_recup = $_GET['req'];// recuperation de requête depuis historique
 }
 ?>
 <!DOCTYPE html>
@@ -72,36 +70,36 @@ if(isset($_GET['action']) && $_GET['action'] == 'reprendre')
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
                 <div class="row">
-                    <form method="POST" action="">
+                    <form method="POST" action="index.php">
                         <div class="form-group">
                             <div class="db-query-block col-sm-7">
                                 <!-- Selecteur BDD -->
                                 <div class="db-block">
                                     <label for="db">Base de données :</label>
                                     <select name="db" class="db-form form-control">
-                                    <?php
-                                    // Boucle de récupération des BDD
-                                    while($base=$bdd->fetch_assoc())
-                                    {
-                                        echo '<option';
-                                        if(isset($_GET['action']) && $_GET['action'] == 'reprendre' && $_GET['db'] == $base['Database'])
+                                        <?php
+                                        // Boucle de récupération des BDD
+                                        while($base=$bdd->fetch_assoc())
                                         {
-                                            echo ' selected';
-
-                                        }elseif(isset($_POST['db']) && ($_POST['db'])== $base['Database'])
-                                        {
-                                         echo ' selected';
+                                            echo '<option';
+                                            if(isset($_GET['action']) && $_GET['action'] == 'reprendre' && $_GET['db'] == $base['Database'])
+                                            {
+                                                echo ' selected';
+                                                
+                                            }elseif(isset($_POST['db']) && ($_POST['db'])== $base['Database'])
+                                            {
+                                             echo ' selected';
+                                            }
+                                            echo '>' . $base['Database'] . '</option>';
                                         }
-                                        echo '>' . $base['Database'] . '</option>';
-                                    }
-                                    ?>
+                                        ?>
                                     </select>
                                 </div><!-- End BDD -->
 
                                 <!-- Champ requete -->
                                 <div class="query-block">
                                     <label for="requete">Lance requêtes :</label>
-                                    <textarea class="form-control" rows="5" id="requete" name="requete" placeholder="Ici, votre requête..."><?php 
+                                    <textarea class="form-control" rows="5" id="requete" name="requete" placeholder="Ici, votre requête..."><?php
                                     if(isset($_GET['action']) && $_GET['action'] == 'reprendre')
                                     {
                                     echo $_GET['req'];
@@ -109,8 +107,7 @@ if(isset($_GET['action']) && $_GET['action'] == 'reprendre')
                                     {
                                         echo $_POST['requete'];
                                     }
-                                    ?>
-                                    </textarea>
+                                    ?></textarea>
                                     <input type="submit" class="form-control btn btn-info" id="envoi" name="envoi" value="Envoyer" />
                                 </div><!-- End requete -->
                             </div>
@@ -128,14 +125,12 @@ if(isset($_GET['action']) && $_GET['action'] == 'reprendre')
 
                                       echo '<p>Aucune requête mémorisée...</p>';
                                     }
-
-
                                     ?>
                                     </div>
                                     <div class="panel-footer">
                                         <div class="row">
-                                            <div class="col-sm-6 col-sm-offset-6">
-                                                <a href="lance_requetes.php?action=supprimer_hist" onclick="return(confirm('Etes vous sur ?'))" class="btn btn-danger" style="margin-left: 0 auto; display: block;">Vider l'historique</a>
+                                            <div class="col-sm-9 col-sm-offset-3">
+                                                <a href="index.php?action=supprimer_hist" onclick="return(confirm('Etes vous sur ?'))" class="btn btn-danger">Vider l'historique</a>
                                             </div>
                                         </div>
                                     </div>
@@ -166,17 +161,26 @@ if(isset($_GET['action']) && $_GET['action'] == 'reprendre')
                                 echo '<div class="error">erreur sur la requete: ' . $_POST['requete'] . '<br />Message: ' . $mysqli->error . '</div>';
                             }
                         }else{
-
                             echo '<div class="success">Résultat de la requête</div>';
-                            echo '<div class="header-req col-sm-6"><b>Requête: </b><p>' . $_POST['requete'] . '</p>';
+                            if (($requete_entree !== FALSE) && ($mysqli->affected_rows>0))
+                            {
+                                echo '<div class="col-sm-12"><h5 style="color: #4BB5C1;">Votre requête a bien été enregistrée</h5></div>';
+                            } else
+                            {
+                                echo '<div class="col-sm-12"><h5 style="color: #E89393;">Aucune ligne affectée par la requête ou l\'entrée que vous tentez de supprimer n\'existe pas</h5></div>';
+                            }
+                            echo '<div class="header-req col-sm-6">';
+                            echo '<b>Requête: </b><p>' . $_POST['requete'] . '</p>';
                             echo '<b>Base de données: </b><p>' . $_POST['db'] . '</p>';
-                            echo '<b>Lignes concernées: </b><p>' . $requete_entree->num_rows . '</p></div>';
+                            echo '<b>Lignes concernées: </b><p>' . $mysqli->affected_rows . '</p>';// ou $requete_entree->num_rows qui ne fonctionnera pas pour un booléen(ex: retour résultat de insert, delete, update...)   
+                            
+                            echo '</div>';
                             echo '<div class="header-tables col-sm-6"><b>Pour information, voici les tables de cette base de données:</b><div class="tables-block">';
 
                             // Envoi historiique sur un fichier txt
                             if(file_exists('historique.txt'))
                             {
-                                fwrite($f, '<a href="?action=reprendre&db=' . $_POST['db'] . '&req=' . $_POST['requete'] . '">' . $_POST['db'] . ' => ' . $_POST['requete'] . '</a><br />');
+                                fwrite($f, '<p>¤¤ <a href="?action=reprendre&db=' . $_POST['db'] . '&req=' . $_POST['requete'] . '">' . $_POST['db'] . ' => ' . $_POST['requete'] . '</a> ¤¤</p>');
                             }
 
                             // Affichage des tables
@@ -191,8 +195,14 @@ if(isset($_GET['action']) && $_GET['action'] == 'reprendre')
                             </div>
                         </h3>
                     </div>
-                    <div class="panel-body">
-                        <table class="table table-hover" border="1" style="border-collapse: collapse; width: 100%;">
+                    </div>
+                    <?php
+                    if (is_object($requete_entree))
+                    {
+                    ?>
+                    <div class="row">
+                    <div class="panel-body col-sm-12">
+                        <table class="table table-hover" border="1">
                             <tr>
                             <?php
 
@@ -200,22 +210,22 @@ if(isset($_GET['action']) && $_GET['action'] == 'reprendre')
                             {
                                 while($colonne = $requete_entree->fetch_field()) // recup du nom des colonnes
                                 {
-                                    echo '<th style="text-align: center; background-color: seagreen;">' . $colonne->name . '</th>';
+                                    echo '<th>' . $colonne->name . '</th>';
                                 } 
                                 echo '</tr>';
                                 $c = 0; // compteur modulo
-                                while($employe = $requete_entree->fetch_assoc()) // recup des ligne de valeurs
+                                while($result = $requete_entree->fetch_assoc()) // recup des ligne de valeurs
                                 {
-                                    // affichage des lignes en couleur differentes
+                                    // affichage des lignes en couleurs differentes
                                     if($c % 2 == 0){ 
 
-                                        echo '<tr style="background-color: beige;">';
+                                        echo '<tr style="background-color: #F5F5F5;">';
                                     }else{
                                         echo '<tr>';
                                     }
                                     $c++;
 
-                                    foreach($employe AS /*$indice =>*/ $valeur) // affichage des valeurs
+                                    foreach($result AS /*$indice =>*/ $valeur) // affichage des valeurs
                                     {
                       
                                         echo '<td style="padding: 4px; text-align: center;">' . $valeur . '</td>';
@@ -227,6 +237,9 @@ if(isset($_GET['action']) && $_GET['action'] == 'reprendre')
                         </table>
                     </div>
                 </div>
+                <?php
+                }
+                ?>
             </div>
         </div>
         <?php }

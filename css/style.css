@@ -2,12 +2,9 @@
 ¤¤¤color style
     #F5F5F5 -> gris clair
     #A9C52F -> vert
-    #2C5D63 -> bleu
+    #2C5D63 -> bleu  2C7F8D
     #283739 -> gris bleu
 */
-body {
-    background-color: #F5F5F5;
-}
 .historique{
     max-height: 142px;
     display: block;
@@ -77,5 +74,29 @@ h5 {
     overflow-y: auto;
 }
 .panel-body {
+    left: 0px;
+    margin: 0 auto;
     overflow-x: auto;
+}
+/* Boutons */
+.btn-info {
+    background-color: #2C5D63;
+}
+.btn-info:hover {
+    background-color: #2C7F8D;
+}
+.btn-danger {
+    background-color: #E89393;
+    border-color: #E89393;
+    margin: 0 auto;
+    display: block;
+}
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th {
+    text-align: center;
+    background-color: #2C5D63;
+    color: #F5F5F5;
 }
